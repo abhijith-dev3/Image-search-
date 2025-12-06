@@ -1,6 +1,6 @@
 # collection of image search app
 
-[demo]()
+[demo](https://abhijith-dev3.github.io/Image-search-/)
 # WallpaperApp-Unsplash
 
 A simple, responsive wallpaper app that lets you search and view high-quality images from Unsplash.
