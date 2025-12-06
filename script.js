@@ -1,60 +1,69 @@
-const accessKey = "RZEIOVfPhS7vMLkFdd2TSKGFBS4o9_FmcV1Nje3FSjw";
+// Unsplash API Access Key
+const accessKey = "U5sAvdgPM6eP_9VzX-8AvZS9S8TkJv8LsslgHw8ENAw";
 
-const formR = document.querySelector("form");
-const searchInputR = document.getElementById("search-input");
-const searchResultsR = document.querySelector(".search-results");
-const showMoreButtonsR = document.getElementById("show-more-button");
 
+const form = document.querySelector("form");
+const searchInput = document.getElementById("search-input");
+const searchResults = document.querySelector(".search-results");
+const showMoreButton = document.getElementById("show-more-button");
 
 let inputData = "";
 let page = 1;
 
+
 async function searchImages() {
-  inputData = searchInputR.value;//what we type in the input section will save to inputData
+  inputData = searchInput.value; 
   const url = `https://api.unsplash.com/search/photos?page=${page}&query=${inputData}&client_id=${accessKey}`;
 
-  const response = await fetch(url);
-  const data =  await response.json();
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
 
-  document.body.style.backgroundImage = "none";
+  
+    document.body.style.backgroundImage = "none";
 
-  if (page === 1) {
-    searchResultsR.innerHTML = "";
-  }
+    if (page === 1) {
+      searchResults.innerHTML = "";
+    }
 
-  const results = data.results;
+    const results = data.results;
 
-  results.map((result) => {
-    const imageWrapper = document.createElement("div");
-    imageWrapper.classList.add("search-result");
+    results.forEach((result) => {
+      const imageWrapper = document.createElement("div");
+      imageWrapper.classList.add("search-result");
 
-    const image = document.createElement("img");
-    image.src = result.urls.small;
-    image.alt = result.alt_description;
+      const image = document.createElement("img");
+      image.src = result.urls.small;
+      image.alt = result.alt_description;
 
-    const imageLink = document.createElement("a");
-    imageLink.href = result.links.html;
-    imageLink.target = "_blank";
-    imageLink.textContent = result.alt_description;
+      const imageLink = document.createElement("a");
+      imageLink.href = result.links.html;
+      imageLink.target = "_blank";
+      imageLink.textContent = result.alt_description;
 
-    imageWrapper.appendChild(image);
-    imageWrapper.appendChild(imageLink);
-    searchResultsR.appendChild(imageWrapper);
-  })
+      imageWrapper.appendChild(image);
+      imageWrapper.appendChild(imageLink);
+      searchResults.appendChild(imageWrapper);
+    });
 
-  page++;
+    page++;
 
-  if (page > 1) {
-    showMoreButtonsR.style.display = "block";
+   
+    if (page > 1) {
+      showMoreButton.style.display = "block";
+    }
+  } catch (error) {
+    console.error("Error fetching images:", error);
   }
 }
 
-formR.addEventListener("submit", (event) => {
-  event.preventDefault();
-  page = 1;
-  searchImages();
-})
 
-showMoreButtonsR.addEventListener("click", () => {
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  page = 1; 
   searchImages();
-})
+});
+
+showMoreButton.addEventListener("click", () => {
+  searchImages();
+});
